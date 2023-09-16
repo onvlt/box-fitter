@@ -42,17 +42,9 @@
 
   const containerBox = new THREE.LineSegments();
   containerBox.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-  containerBox.position.set(0, 0, 0);
-  // containerBox.translateX(containerDimensions.width / -2);
-  // containerBox.translateY(containerDimensions.height / -2);
-  // containerBox.translateZ(containerDimensions.depth / -2);
 
   const itemBox = new THREE.LineSegments();
   itemBox.material = new THREE.LineBasicMaterial({ color: 0xff0000 });
-  itemBox.position.set(0, 0, 0);
-  // itemBox.translateX(itemDimensions.width / -2);
-  // itemBox.translateY(itemDimensions.height / -2);
-  // itemBox.translateZ(itemDimensions.depth / -2);
 
   const group = new THREE.Group();
   group.add(containerBox);
@@ -105,98 +97,119 @@
 </script>
 
 <main>
-  <fieldset>
-    <legend>Camera</legend>
-    <label>
-      Zoom
-      <input bind:value={zoom} type="range" min="1.5" max="50" step="0.1" />
-    </label>
-    <label>
-      Rotation x:
-      <input
-        bind:value={rotation.x}
-        type="range"
-        min={-Math.PI}
-        max={Math.PI}
-        step="0.01"
-      />
-      {rotation.x}
-    </label>
-    <label>
-      Rotation y:
-      <input
-        bind:value={rotation.y}
-        type="range"
-        min={-Math.PI}
-        max={Math.PI}
-        step="0.01"
-      />
-      {rotation.y}
-    </label>
-    <label>
-      Rotation z:
-      <input
-        bind:value={rotation.z}
-        type="range"
-        min={-Math.PI}
-        max={Math.PI}
-        step="0.01"
-      />
-      {rotation.z}
-    </label>
-  </fieldset>
-  <fieldset>
-    <legend>Container</legend>
-    <label>
-      Width: <input
-        type="number"
-        bind:value={containerDimensions.width}
-        min="0"
-        step="0.5"
-      />
-    </label>
-    <label>
-      Height: <input
-        type="number"
-        bind:value={containerDimensions.height}
-        min="0"
-        step="0.5"
-      />
-    </label>
-    <label>
-      Depth: <input
-        type="number"
-        bind:value={containerDimensions.depth}
-        min="0"
-        step="0.5"
-      />
-    </label>
-  </fieldset>
-  <fieldset>
-    <legend>Item</legend>
-    <label>
-      Width: <input
-        type="number"
-        bind:value={itemDimensions.width}
-        min="0"
-        step="0.5"
-      />
-    </label>
-    <label>
-      Height: <input
-        type="number"
-        bind:value={itemDimensions.height}
-        min="0"
-        step="0.5"
-      />
-    </label>
-    <label>
-      Depth: <input
-        type="number"
-        bind:value={itemDimensions.depth}
-        min="0"
-        step="0.5"
-      />
-    </label>
-  </fieldset>
+  <form class="params">
+    <fieldset>
+      <legend>Camera</legend>
+      <label>
+        Zoom
+        <input bind:value={zoom} type="range" min="1.5" max="50" step="0.1" />
+      </label>
+      <label>
+        Rotation x:
+        <input
+          bind:value={rotation.x}
+          type="range"
+          min={-Math.PI}
+          max={Math.PI}
+          step="0.01"
+        />
+      </label>
+      <label>
+        Rotation y:
+        <input
+          bind:value={rotation.y}
+          type="range"
+          min={-Math.PI}
+          max={Math.PI}
+          step="0.01"
+        />
+      </label>
+      <label>
+        Rotation z:
+        <input
+          bind:value={rotation.z}
+          type="range"
+          min={-Math.PI}
+          max={Math.PI}
+          step="0.01"
+        />
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Container</legend>
+      <label>
+        Width: <input
+          type="number"
+          bind:value={containerDimensions.width}
+          min="0"
+          step="0.5"
+        />
+      </label>
+      <label>
+        Height: <input
+          type="number"
+          bind:value={containerDimensions.height}
+          min="0"
+          step="0.5"
+        />
+      </label>
+      <label>
+        Depth: <input
+          type="number"
+          bind:value={containerDimensions.depth}
+          min="0"
+          step="0.5"
+        />
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Item</legend>
+      <label>
+        Width: <input
+          type="number"
+          bind:value={itemDimensions.width}
+          min="0"
+          step="0.5"
+        />
+      </label>
+      <label>
+        Height: <input
+          type="number"
+          bind:value={itemDimensions.height}
+          min="0"
+          step="0.5"
+        />
+      </label>
+      <label>
+        Depth: <input
+          type="number"
+          bind:value={itemDimensions.depth}
+          min="0"
+          step="0.5"
+        />
+      </label>
+    </fieldset>
+  </form>
 </main>
+
+<style>
+  .params {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #222;
+    padding: 1rem;
+    color: white;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  fieldset {
+    border: 1px solid #999;
+  }
+
+  label {
+    display: block;
+  }
+</style>
