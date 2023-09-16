@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as THREE from "three";
-  import { MapControls } from "three/addons/controls/MapControls.js";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
   interface Dimensions {
     width: number;
@@ -10,12 +10,6 @@
 
   // Data
 
-  let zoom = 5;
-  let rotation = {
-    x: 0.3,
-    y: 0.6,
-    z: 0,
-  };
   let containerDimensions: Dimensions = {
     width: 3,
     height: 1,
@@ -36,6 +30,7 @@
     0.1,
     1000
   );
+  camera.position.z = 5;
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -53,15 +48,12 @@
 
   scene.add(group);
 
-  const controls = new MapControls(camera, renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  $: {
-    camera.position.z = zoom;
-    group.rotation.x = rotation.x;
-    group.rotation.y = rotation.y;
-    group.rotation.z = rotation.z;
+  controls.maxPolarAngle = Math.PI / 2;
 
+  $: {
     const containerBoxGeometry = new THREE.EdgesGeometry(
       new THREE.BoxGeometry(
         containerDimensions.width,
@@ -115,43 +107,6 @@
 
 <main>
   <form class="params">
-    <fieldset>
-      <legend>Camera</legend>
-      <label>
-        Zoom
-        <input bind:value={zoom} type="range" min="1.5" max="50" step="0.1" />
-      </label>
-      <label>
-        Rotation x:
-        <input
-          bind:value={rotation.x}
-          type="range"
-          min={-Math.PI}
-          max={Math.PI}
-          step="0.01"
-        />
-      </label>
-      <label>
-        Rotation y:
-        <input
-          bind:value={rotation.y}
-          type="range"
-          min={-Math.PI}
-          max={Math.PI}
-          step="0.01"
-        />
-      </label>
-      <label>
-        Rotation z:
-        <input
-          bind:value={rotation.z}
-          type="range"
-          min={-Math.PI}
-          max={Math.PI}
-          step="0.01"
-        />
-      </label>
-    </fieldset>
     <fieldset>
       <legend>Container</legend>
       <label>
