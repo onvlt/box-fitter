@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as THREE from "three";
+  import { MapControls } from "three/addons/controls/MapControls.js";
 
   interface Dimensions {
     width: number;
@@ -52,6 +53,9 @@
 
   scene.add(group);
 
+  const controls = new MapControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
   $: {
     camera.position.z = zoom;
     group.rotation.x = rotation.x;
@@ -91,9 +95,22 @@
       itemDimensions.height / -2,
       itemDimensions.depth / -2
     );
+  }
 
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
     renderer.render(scene, camera);
   }
+
+  animate();
+
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 </script>
 
 <main>
