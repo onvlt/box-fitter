@@ -87,6 +87,12 @@
       itemDimensions.height / 2,
       itemDimensions.depth / 2
     );
+
+    group.position.set(
+      containerDimensions.width / -2,
+      containerDimensions.height / -2,
+      containerDimensions.depth / -2
+    );
   }
 
   function animate() {
