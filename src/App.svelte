@@ -207,9 +207,15 @@
 
   fieldset {
     border: 1px solid #999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem 1rem 1rem;
   }
 
   label {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 </style>
