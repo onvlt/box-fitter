@@ -14,7 +14,7 @@
   let rotation = {
     x: 0.3,
     y: 0.6,
-    z: -Math.PI,
+    z: 0,
   };
   let containerDimensions: Dimensions = {
     width: 3,
@@ -85,15 +85,15 @@
     itemBox.geometry = itemBoxGeometry;
 
     containerBox.position.set(
-      containerDimensions.width / -2,
-      containerDimensions.height / -2,
-      containerDimensions.depth / -2
+      containerDimensions.width / 2,
+      containerDimensions.height / 2,
+      containerDimensions.depth / 2
     );
 
     itemBox.position.set(
-      itemDimensions.width / -2,
-      itemDimensions.height / -2,
-      itemDimensions.depth / -2
+      itemDimensions.width / 2,
+      itemDimensions.height / 2,
+      itemDimensions.depth / 2
     );
   }
 
