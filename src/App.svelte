@@ -26,7 +26,7 @@
     depth: containerDimensions.depth / itemDimensions.depth,
   };
 
-  // Scene
+  // Scene, camera, controls, renderer setup
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -40,6 +40,19 @@
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.maxPolarAngle = Math.PI / 2;
+
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Build shapes
 
   const containerBox = new THREE.LineSegments();
   containerBox.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
@@ -61,11 +74,6 @@
   group.add(itemBox);
 
   scene.add(group);
-
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-
-  controls.maxPolarAngle = Math.PI / 2;
 
   $: {
     const containerBoxGeometry = new THREE.EdgesGeometry(
@@ -137,13 +145,6 @@
   }
 
   animate();
-
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
 
   function displayFit(n: number) {
     if (Number.isFinite(n)) {
