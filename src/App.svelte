@@ -2,20 +2,22 @@
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-  interface Dimensions {
+  interface Dim {
     width: number;
     height: number;
     depth: number;
   }
 
+  type DimTuple = [x: number, y: number, z: number];
+
   // Data
 
-  let containerDimensions: Dimensions = {
+  let containerDimensions: Dim = {
     width: 120,
     height: 60,
     depth: 40,
   };
-  let itemDimensions: Dimensions = {
+  let itemDimensions: Dim = {
     width: 20,
     height: 50,
     depth: 30,
@@ -54,11 +56,8 @@
 
   // Build shapes
 
-  const containerBox = new THREE.LineSegments();
-  containerBox.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-
-  const itemBox = new THREE.LineSegments();
-  itemBox.material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+  const containerBoxMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+  const itemBoxMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
 
   const repeatedItemBoxMaterial = new THREE.LineDashedMaterial({
     color: 0x990000,
@@ -67,58 +66,35 @@
     opacity: 50,
   });
 
-  let repeatedBoxes: Array<THREE.Object3D> = [];
-
   const group = new THREE.Group();
-  group.add(containerBox);
-  group.add(itemBox);
-
   scene.add(group);
 
+  let objects: Array<THREE.Object3D> = [];
+
   $: {
-    const containerBoxGeometry = new THREE.EdgesGeometry(
-      new THREE.BoxGeometry(
-        containerDimensions.width,
-        containerDimensions.height,
-        containerDimensions.depth
-      )
-    );
-
-    const itemBoxGeometry = new THREE.EdgesGeometry(
-      new THREE.BoxGeometry(
-        itemDimensions.width,
-        itemDimensions.height,
-        itemDimensions.depth
-      )
-    );
-
-    containerBox.geometry.dispose();
-    containerBox.geometry = containerBoxGeometry;
-
-    itemBox.geometry.dispose();
-    itemBox.geometry = itemBoxGeometry;
-
-    containerBox.position.set(
-      containerDimensions.width / 2,
-      containerDimensions.height / 2,
-      containerDimensions.depth / 2
-    );
-
-    itemBox.position.set(
-      itemDimensions.width / 2,
-      itemDimensions.height / 2,
-      itemDimensions.depth / 2
-    );
-
-    group.position.set(
-      containerDimensions.width / -2,
-      containerDimensions.height / -2,
-      containerDimensions.depth / -2
-    );
-
-    for (const box of repeatedBoxes) {
-      group.remove(box);
+    for (const object of objects) {
+      group.remove(object);
+      objects = [];
     }
+
+    // Container
+    const containerBoxGeometry = new THREE.EdgesGeometry(
+      new THREE.BoxGeometry(...Object.values(containerDimensions))
+    );
+    const containerBox = new THREE.LineSegments(
+      containerBoxGeometry,
+      containerBoxMaterial
+    );
+    containerBox.position.set(
+      ...(Object.values(containerDimensions).map((dim) => dim / 2) as DimTuple)
+    );
+    group.add(containerBox);
+    objects.push(containerBox);
+
+    // Items
+    const itemBoxGeometry = new THREE.EdgesGeometry(
+      new THREE.BoxGeometry(...Object.values(itemDimensions))
+    );
 
     const REPEAT_LIMIT = 100;
 
@@ -126,22 +102,29 @@
       for (let x = 0; x < Math.floor(fit.width) && x < REPEAT_LIMIT; x++) {
         for (let y = 0; y < Math.floor(fit.height) && y < REPEAT_LIMIT; y++) {
           for (let z = 0; z < Math.floor(fit.depth) && z < REPEAT_LIMIT; z++) {
-            const extraBoxItem = new THREE.LineSegments(
+            const itemBox = new THREE.LineSegments(
               itemBoxGeometry,
-              repeatedItemBoxMaterial
+              x === 0 && y === 0 && z === 0
+                ? itemBoxMaterial
+                : repeatedItemBoxMaterial
             );
-            extraBoxItem.position.set(
-              itemBox.position.x + x * itemDimensions.width,
-              itemBox.position.y + y * itemDimensions.height,
-              itemBox.position.z + z * itemDimensions.depth
+            itemBox.position.set(
+              itemDimensions.width / 2 + x * itemDimensions.width,
+              itemDimensions.height / 2 + y * itemDimensions.height,
+              itemDimensions.depth / 2 + z * itemDimensions.depth
             );
-            extraBoxItem.computeLineDistances();
-            repeatedBoxes.push(extraBoxItem);
-            group.add(extraBoxItem);
-            console.log(x, y, z);
+            itemBox.computeLineDistances();
+            group.add(itemBox);
+            objects.push(itemBox);
           }
         }
       }
+
+      group.position.set(
+        containerDimensions.width / -2,
+        containerDimensions.height / -2,
+        containerDimensions.depth / -2
+      );
     }
   }
 
