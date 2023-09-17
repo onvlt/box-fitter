@@ -20,6 +20,11 @@
     height: 1.5,
     depth: 1,
   };
+  $: fit = {
+    width: containerDimensions.width / itemDimensions.width,
+    height: containerDimensions.height / itemDimensions.height,
+    depth: containerDimensions.depth / itemDimensions.depth,
+  };
 
   // Scene
 
@@ -41,6 +46,15 @@
 
   const itemBox = new THREE.LineSegments();
   itemBox.material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+
+  const repeatedItemBoxMaterial = new THREE.LineDashedMaterial({
+    color: 0xff0000,
+    dashSize: 1,
+    gapSize: 0.5,
+    opacity: 50,
+  });
+
+  let repeatedBoxes: Array<THREE.Object3D> = [];
 
   const group = new THREE.Group();
   group.add(containerBox);
@@ -76,6 +90,12 @@
     itemBox.geometry.dispose();
     itemBox.geometry = itemBoxGeometry;
 
+    // for (const [key, value] of Object.entries(fit)) {
+
+    // }
+
+    console.log("hello");
+
     containerBox.position.set(
       containerDimensions.width / 2,
       containerDimensions.height / 2,
@@ -93,6 +113,26 @@
       containerDimensions.height / -2,
       containerDimensions.depth / -2
     );
+
+    for (const box of repeatedBoxes) {
+      group.remove(box);
+    }
+
+    if (Number.isFinite(fit.width)) {
+      for (let index = 1; index < fit.width - 1 && index < 100; index++) {
+        const extraBoxItem = new THREE.LineSegments(
+          itemBoxGeometry,
+          repeatedItemBoxMaterial
+        );
+        extraBoxItem.position.set(
+          itemBox.position.x + index * itemDimensions.width,
+          itemBox.position.y,
+          itemBox.position.z
+        );
+        repeatedBoxes.push(extraBoxItem);
+        group.add(extraBoxItem);
+      }
+    }
   }
 
   function animate() {
@@ -109,6 +149,13 @@
 
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
+
+  function displayFit(n: number) {
+    if (Number.isFinite(n)) {
+      return Math.floor(n);
+    }
+    return "N/A";
+  }
 </script>
 
 <main>
@@ -167,6 +214,17 @@
         />
       </label>
     </fieldset>
+    <div>
+      Fits
+      <dl>
+        <dt>Width:</dt>
+        <dd>{displayFit(fit.width)}</dd>
+        <dt>Height:</dt>
+        <dd>{displayFit(fit.height)}</dd>
+        <dt>Depth:</dt>
+        <dd>{displayFit(fit.depth)}</dd>
+      </dl>
+    </div>
   </form>
 </main>
 
