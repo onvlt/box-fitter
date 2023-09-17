@@ -11,14 +11,14 @@
   // Data
 
   let containerDimensions: Dimensions = {
-    width: 3,
-    height: 1,
-    depth: 2,
+    width: 120,
+    height: 60,
+    depth: 40,
   };
   let itemDimensions: Dimensions = {
-    width: 0.8,
-    height: 1.5,
-    depth: 1,
+    width: 20,
+    height: 50,
+    depth: 30,
   };
   $: fit = {
     width: containerDimensions.width / itemDimensions.width,
@@ -35,7 +35,7 @@
     0.1,
     1000
   );
-  camera.position.z = 5;
+  camera.position.z = 100;
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -48,9 +48,9 @@
   itemBox.material = new THREE.LineBasicMaterial({ color: 0xff0000 });
 
   const repeatedItemBoxMaterial = new THREE.LineDashedMaterial({
-    color: 0xff0000,
+    color: 0x990000,
     dashSize: 1,
-    gapSize: 0.5,
+    gapSize: 2,
     opacity: 50,
   });
 
@@ -123,6 +123,7 @@
           itemBox.position.y,
           itemBox.position.z
         );
+        extraBoxItem.computeLineDistances();
         repeatedBoxes.push(extraBoxItem);
         group.add(extraBoxItem);
       }
