@@ -102,7 +102,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    max-width: 300;
+    width: var(--sidebar-size);
     background-color: #222;
     padding: 1rem;
     color: white;

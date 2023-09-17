@@ -5,7 +5,6 @@
     containerDimensions,
     itemDimensions,
     fit,
-    totalFit,
     repeatBoxes,
   } from "./store";
   import type { DimTuple } from "./types";
@@ -13,29 +12,32 @@
 
   // Scene, camera, controls, renderer setup
 
+  const SIDEBAR_OFFSET = 380;
+
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
+  const camera = new THREE.PerspectiveCamera();
+  camera.fov = 75;
+  camera.near = 0.1;
+  camera.far = 1000;
   camera.position.z = 100;
 
   const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.maxPolarAngle = Math.PI / 2;
 
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+  function onResize() {
+    const width = window.innerWidth - SIDEBAR_OFFSET;
+    const height = window.innerHeight;
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  }
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+  onResize();
+  window.addEventListener("resize", onResize);
 
   // Build shapes
 
@@ -121,6 +123,6 @@
   animate();
 </script>
 
-<main>
+<main style="--sidebar-size: {SIDEBAR_OFFSET}px">
   <Params />
 </main>

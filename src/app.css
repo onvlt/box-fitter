@@ -3,6 +3,13 @@ body {
   font-family: "IBM Plex Mono", system-ui, sans-serif;
   height: 100%;
   font-size: 0.825rem;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 input,
@@ -10,4 +17,9 @@ button,
 textarea,
 select {
   font: inherit;
+}
+
+canvas {
+  position: fixed;
+  right: 0;
 }
