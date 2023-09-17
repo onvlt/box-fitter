@@ -82,22 +82,35 @@
       new THREE.BoxGeometry(...Object.values($itemDimensions))
     );
 
+    const firstItemBox = new THREE.LineSegments(
+      itemBoxGeometry,
+      itemBoxMaterial
+    );
+    firstItemBox.position.set(
+      $itemDimensions.width / 2,
+      $itemDimensions.height / 2,
+      $itemDimensions.depth / 2
+    );
+    group.add(firstItemBox);
+    objects.push(firstItemBox);
+
     const repeatLimit = $repeatBoxes ? 100 : 1;
 
     if (Object.values($fit).every((n) => Number.isFinite(n))) {
       for (let x = 0; x < Math.floor($fit.width) && x < repeatLimit; x++) {
         for (let y = 0; y < Math.floor($fit.height) && y < repeatLimit; y++) {
           for (let z = 0; z < Math.floor($fit.depth) && z < repeatLimit; z++) {
+            if (x === 0 && y === 0 && z == 0) {
+              continue;
+            }
             const itemBox = new THREE.LineSegments(
               itemBoxGeometry,
-              x === 0 && y === 0 && z === 0
-                ? itemBoxMaterial
-                : repeatedItemBoxMaterial
+              repeatedItemBoxMaterial
             );
             itemBox.position.set(
-              $itemDimensions.width / 2 + x * $itemDimensions.width,
-              $itemDimensions.height / 2 + y * $itemDimensions.height,
-              $itemDimensions.depth / 2 + z * $itemDimensions.depth
+              firstItemBox.position.x + x * $itemDimensions.width,
+              firstItemBox.position.y + y * $itemDimensions.height,
+              firstItemBox.position.z + z * $itemDimensions.depth
             );
             itemBox.computeLineDistances();
             group.add(itemBox);
