@@ -27,6 +27,10 @@
     height: containerDimensions.height / itemDimensions.height,
     depth: containerDimensions.depth / itemDimensions.depth,
   };
+  $: totalFit = Object.values(fit)
+    .filter(Number.isFinite)
+    .map(Math.floor)
+    .reduce((a, b) => a * b, 1);
 
   // Scene, camera, controls, renderer setup
 
@@ -71,6 +75,7 @@
 
   let objects: Array<THREE.Object3D> = [];
 
+  // Build shapes initially and rebuild them when input changes
   $: {
     for (const object of objects) {
       group.remove(object);
@@ -209,6 +214,8 @@
         <dd>{displayFit(fit.height)}</dd>
         <dt>Depth:</dt>
         <dd>{displayFit(fit.depth)}</dd>
+        <dt>Total:</dt>
+        <dd>{totalFit}</dd>
       </dl>
     </div>
   </form>
@@ -239,5 +246,10 @@
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto auto;
   }
 </style>
