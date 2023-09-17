@@ -6,6 +6,7 @@
     itemDimensions,
     fit,
     repeatBoxes,
+    totalFit,
   } from "./store";
   import type { DimTuple } from "./types";
   import Params from "./Params.svelte";
@@ -15,6 +16,7 @@
   const SIDEBAR_OFFSET = 380;
 
   const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
   const camera = new THREE.PerspectiveCamera();
   camera.fov = 75;
   camera.near = 0.1;
@@ -41,11 +43,10 @@
 
   // Build shapes
 
-  const containerBoxMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-  const itemBoxMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+  const containerBoxMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
 
   const repeatedItemBoxMaterial = new THREE.LineDashedMaterial({
-    color: 0x990000,
+    color: 0x00aa00,
     dashSize: 1,
     gapSize: 2,
     opacity: 50,
@@ -81,7 +82,9 @@
     const itemBoxGeometry = new THREE.EdgesGeometry(
       new THREE.BoxGeometry(...Object.values($itemDimensions))
     );
-
+    const itemBoxMaterial = new THREE.LineBasicMaterial({
+      color: $totalFit === 0 ? 0xff0000 : 0x00ff00,
+    });
     const firstItemBox = new THREE.LineSegments(
       itemBoxGeometry,
       itemBoxMaterial

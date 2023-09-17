@@ -90,9 +90,16 @@
       Swap depth ↔ width
     </button>
   </fieldset>
+  <fieldset>
+    <legend>Display options</legend>
+    <label>
+      <input type="checkbox" bind:checked={$repeatBoxes} />
+      Repeat items
+    </label>
+  </fieldset>
   <div>
-    Fits
-    <dl>
+    <p class="par-space">Fits:</p>
+    <dl class="par-space">
       <dt>Width:</dt>
       <dd>{displayFit($fit.width)}</dd>
       <dt>Height:</dt>
@@ -102,18 +109,26 @@
       <dt><strong>Total:</strong></dt>
       <dd>{$totalFit}</dd>
     </dl>
-  </div>
-  <div>
-    <label>
-      <input type="checkbox" bind:checked={$repeatBoxes} />
-      Repeat
-    </label>
+    {#if $totalFit === 0}
+      <div class="warning">
+        <p class="par-space-half">
+          <strong>⚠️ Item doesn't fit the container.</strong>
+        </p>
+        <p>Try rotating the box.</p>
+      </div>
+    {:else if $totalFit === 1}
+      <strong class="success">Item fits the container once.</strong>
+    {:else if $totalFit === 2}
+      <strong class="success">Item fits the container twice.</strong>
+    {:else}
+      <strong class="success">Item fits the container {$totalFit} times</strong>
+    {/if}
   </div>
 </div>
 
 <style>
   h1 {
-    font: inherit;
+    font-weight: bold;
   }
 
   .params {
@@ -153,5 +168,21 @@
 
   dd {
     margin: 0;
+  }
+
+  .success {
+    color: #00ff00;
+  }
+
+  .warning {
+    color: #ffff00;
+  }
+
+  .par-space {
+    margin-bottom: 1em;
+  }
+
+  .par-space-half {
+    margin-bottom: 0.5rem;
   }
 </style>
