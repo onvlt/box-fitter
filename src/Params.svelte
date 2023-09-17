@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { get, type Writable } from "svelte/store";
   import {
     containerDimensions,
     fit,
@@ -6,12 +7,21 @@
     repeatBoxes,
     totalFit,
   } from "./store";
+  import type { Dim } from "./types";
 
   function displayFit(n: number) {
     if (Number.isFinite(n)) {
       return Math.floor(n);
     }
     return "N/A";
+  }
+
+  function swap(dim: Writable<Dim>, a: keyof Dim, b: keyof Dim) {
+    dim.update((d) => ({
+      ...d,
+      [a]: d[b],
+      [b]: d[a],
+    }));
   }
 </script>
 
@@ -70,6 +80,15 @@
         step="0.5"
       />
     </label>
+    <button on:click={() => swap(itemDimensions, "width", "height")}>
+      Swap width ↔ height
+    </button>
+    <button on:click={() => swap(itemDimensions, "height", "depth")}>
+      Swap height ↔ depth
+    </button>
+    <button on:click={() => swap(itemDimensions, "depth", "width")}>
+      Swap depth ↔ width
+    </button>
   </fieldset>
   <div>
     Fits
