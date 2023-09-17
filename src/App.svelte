@@ -90,12 +90,6 @@
     itemBox.geometry.dispose();
     itemBox.geometry = itemBoxGeometry;
 
-    // for (const [key, value] of Object.entries(fit)) {
-
-    // }
-
-    console.log("hello");
-
     containerBox.position.set(
       containerDimensions.width / 2,
       containerDimensions.height / 2,
