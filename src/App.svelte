@@ -46,10 +46,9 @@
   const containerBoxMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
 
   const repeatedItemBoxMaterial = new THREE.LineDashedMaterial({
-    color: 0x00aa00,
+    color: 0x008800,
     dashSize: 1,
     gapSize: 2,
-    opacity: 50,
   });
 
   const group = new THREE.Group();
