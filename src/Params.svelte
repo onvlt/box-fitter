@@ -80,7 +80,7 @@
       <dd>{displayFit($fit.height)}</dd>
       <dt>Depth:</dt>
       <dd>{displayFit($fit.depth)}</dd>
-      <dt>Total:</dt>
+      <dt><strong>Total:</strong></dt>
       <dd>{$totalFit}</dd>
     </dl>
   </div>
@@ -128,6 +128,11 @@
 
   dl {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+  }
+
+  dd {
+    margin: 0;
   }
 </style>

@@ -2,6 +2,7 @@ body {
   margin: 0;
   font-family: "IBM Plex Mono", system-ui, sans-serif;
   height: 100%;
+  font-size: 0.825rem;
 }
 
 input,
