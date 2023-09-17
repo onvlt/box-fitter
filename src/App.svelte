@@ -120,20 +120,27 @@
       group.remove(box);
     }
 
-    if (Number.isFinite(fit.width)) {
-      for (let index = 1; index < fit.width - 1 && index < 100; index++) {
-        const extraBoxItem = new THREE.LineSegments(
-          itemBoxGeometry,
-          repeatedItemBoxMaterial
-        );
-        extraBoxItem.position.set(
-          itemBox.position.x + index * itemDimensions.width,
-          itemBox.position.y,
-          itemBox.position.z
-        );
-        extraBoxItem.computeLineDistances();
-        repeatedBoxes.push(extraBoxItem);
-        group.add(extraBoxItem);
+    const REPEAT_LIMIT = 100;
+
+    if (Object.values(fit).every((n) => Number.isFinite(n))) {
+      for (let x = 0; x < Math.floor(fit.width) && x < REPEAT_LIMIT; x++) {
+        for (let y = 0; y < Math.floor(fit.height) && y < REPEAT_LIMIT; y++) {
+          for (let z = 0; z < Math.floor(fit.depth) && z < REPEAT_LIMIT; z++) {
+            const extraBoxItem = new THREE.LineSegments(
+              itemBoxGeometry,
+              repeatedItemBoxMaterial
+            );
+            extraBoxItem.position.set(
+              itemBox.position.x + x * itemDimensions.width,
+              itemBox.position.y + y * itemDimensions.height,
+              itemBox.position.z + z * itemDimensions.depth
+            );
+            extraBoxItem.computeLineDistances();
+            repeatedBoxes.push(extraBoxItem);
+            group.add(extraBoxItem);
+            console.log(x, y, z);
+          }
+        }
       }
     }
   }
