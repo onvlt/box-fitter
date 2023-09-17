@@ -22,6 +22,7 @@
     height: 50,
     depth: 30,
   };
+  let repeat = true;
   $: fit = {
     width: containerDimensions.width / itemDimensions.width,
     height: containerDimensions.height / itemDimensions.height,
@@ -101,12 +102,12 @@
       new THREE.BoxGeometry(...Object.values(itemDimensions))
     );
 
-    const REPEAT_LIMIT = 100;
+    const repeatLimit = repeat ? 100 : 1;
 
     if (Object.values(fit).every((n) => Number.isFinite(n))) {
-      for (let x = 0; x < Math.floor(fit.width) && x < REPEAT_LIMIT; x++) {
-        for (let y = 0; y < Math.floor(fit.height) && y < REPEAT_LIMIT; y++) {
-          for (let z = 0; z < Math.floor(fit.depth) && z < REPEAT_LIMIT; z++) {
+      for (let x = 0; x < Math.floor(fit.width) && x < repeatLimit; x++) {
+        for (let y = 0; y < Math.floor(fit.height) && y < repeatLimit; y++) {
+          for (let z = 0; z < Math.floor(fit.depth) && z < repeatLimit; z++) {
             const itemBox = new THREE.LineSegments(
               itemBoxGeometry,
               x === 0 && y === 0 && z === 0
@@ -217,6 +218,12 @@
         <dt>Total:</dt>
         <dd>{totalFit}</dd>
       </dl>
+    </div>
+    <div>
+      <label>
+        <input type="checkbox" bind:checked={repeat} />
+        Repeat
+      </label>
     </div>
   </form>
 </main>
